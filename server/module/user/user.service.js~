@@ -67,7 +67,7 @@ async function add({ name, alias }) {
         const userCode = Date.now();
         const userAlias = aliasCheck.alias;
 
-        const qrURl = `${Configs.frontend_url}/qr?alias=${userAlias}&code=${userCode}`;
+        const qrURl = `${Configs.app_url}/qr?alias=${userAlias}&code=${userCode}`;
 
         const userInvitaionQr = await QrCode.toDataURL(qrURl, {
             errorCorrectionLevel: "H",
