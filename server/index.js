@@ -6,10 +6,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const UserRouter = require("./module/user/user.routes");
 const AppOpenMiddleware = require("./middleware/app-open");
-const AppAdminMiddleware = require("./middleware/app-admin");
 const cron = require("node-cron");
 
-const code = Math.floor(Math.random() * 1000000);
 const isProduction = Configs.environment === "prod";
 
 function main() {
@@ -29,7 +27,6 @@ function main() {
     app.use(cookieParser());
 
     app.use(AppOpenMiddleware(!isProduction));
-    app.use(AppAdminMiddleware(code))
     app.use("/u", UserRouter);
 
     app.get("/ping", (req, res) => {
@@ -43,7 +40,7 @@ function main() {
             console.log("App running in Production");
         }
 
-        console.log("AppAdminCode", code)
+        console.log("AppAdminCode", Configs.code)
     });
 }
 
