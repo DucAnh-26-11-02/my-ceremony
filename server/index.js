@@ -28,7 +28,7 @@ function main() {
     app.use(cookieParser());
 
     app.use(AppOpenMiddleware(!isProduction));
-    app.use(AppAdminMiddleware())
+    app.use(AppAdminMiddleware(code))
     app.use("/u", UserRouter);
 
     app.get("/ping", (req, res) => {
