@@ -7,18 +7,19 @@ const cookieParser = require("cookie-parser");
 const UserRouter = require("./module/user/user.routes");
 const AppOpenMiddleware = require("./middleware/app-open");
 const AppAdminMiddleware = require("./middleware/app-admin");
+const cron = require("node-cron");
 
-const code = Math.floor(Math.random()*1000000);
+const code = Math.floor(Math.random() * 1000000);
+const isProduction = Configs.environment === "prod";
 
 function main() {
     InitDatabase();
 
     const app = express();
     const port = Configs.port;
-    const isProduction = Configs.environment === "prod";
 
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({extended: true}));
     app.use(
         cors({
             origin: "*",
@@ -32,7 +33,7 @@ function main() {
     app.use("/u", UserRouter);
 
     app.get("/ping", (req, res) => {
-        return res.json({ ok: true, status: 200 });
+        return res.json({ok: true, status: 200});
     });
 
     app.listen(port, () => {
@@ -47,3 +48,12 @@ function main() {
 }
 
 main();
+
+cron.schedule("*/14 * * * *", () => {
+    if (!isProduction) return;
+    fetch(`${Configs.app_url}/ping`).then(() => {
+        console.log("Reload App");
+    }).catch((e) => {
+        console.error(e)
+    });
+});
