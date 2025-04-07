@@ -18,12 +18,9 @@ function main() {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
-    app.use(
-        cors({
-            origin: "*",
-            methods: ["GET", "POST", "PUT", "DELETE"],
-        })
-    );
+    app.use(cors({
+        origin: "*", methods: ["GET", "POST", "PUT", "DELETE"],
+    }));
     app.use(cookieParser());
 
     app.use(AppOpenMiddleware(!isProduction));
@@ -46,11 +43,14 @@ function main() {
 
 main();
 
-cron.schedule("*/14 * * * *", () => {
-    if (!isProduction) return;
+const restart = cron.schedule("*/14 * * * *", () => {
     fetch(`${Configs.app_url}/ping`).then(() => {
         console.log("Reload App");
     }).catch((e) => {
         console.error(e)
     });
 });
+
+if (isProduction) {
+    restart.start();
+}
