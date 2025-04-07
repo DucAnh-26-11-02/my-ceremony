@@ -33,6 +33,16 @@ export default function QrPage() {
     const alias = searchParams.get("alias") ?? "";
     const code = searchParams.get("code") ?? "";
 
+    const onUpdate = async () => {
+        const data = await getCeremonyData(alias, code);
+        if (data) {
+            setCeremonyData(data);
+            setState(QR_PAGE_STATE.LOADED_CEREMONY_DATA);
+        } else {
+            setState(QR_PAGE_STATE.NOT_FOUND_CEREMONY_DATA);
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             if (!alias || !code) {
@@ -92,7 +102,10 @@ export default function QrPage() {
                             Viewing information for my ceremony
                         </p>
                     </div>
-                    <CeremonyDetails ceremony={ceremonyData} />
+                    <CeremonyDetails
+                        ceremony={ceremonyData}
+                        onUpdate={onUpdate}
+                    />
                 </div>
             </div>
         );

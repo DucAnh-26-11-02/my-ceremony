@@ -40,7 +40,7 @@ function CardModal({ card, onClose }) {
                         <div
                             className="absolute w-full h-full backface-hidden flex justify-center items-center"
                             style={{
-                                backgroundImage: `url(${card.front})`,
+                                backgroundImage: `url(${card.front.url})`,
                                 backgroundSize: "contain",
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
@@ -52,7 +52,7 @@ function CardModal({ card, onClose }) {
                         <div
                             className="absolute w-full h-full backface-hidden rotate-y-180 flex justify-center items-center"
                             style={{
-                                backgroundImage: `url(${card.back})`,
+                                backgroundImage: `url(${card.back.url})`,
                                 backgroundSize: "contain",
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
