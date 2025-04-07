@@ -13,7 +13,7 @@ export default function AppRouter() {
             <Route element={<MainLayout />}>
                 {Configs.app_open === "open" && (
                     <>
-                        <Route path="" element={<MainPage />} />
+                        <Route path="/" element={<MainPage />} />
                         <Route
                             element={
                                 <>
@@ -22,7 +22,7 @@ export default function AppRouter() {
                                 </>
                             }
                         >
-                            <Route path="qr" element={<QrLayout />}>
+                            <Route path="/qr" element={<QrLayout />}>
                                 <Route path="" element={<QrPage />} />
                             </Route>
                             <Route path="*" element={<p>Not found</p>} />
