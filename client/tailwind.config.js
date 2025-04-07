@@ -46,5 +46,17 @@ module.exports = {
             },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [
+        require("tailwindcss-animate"),
+        function ({ addUtilities }) {
+            addUtilities(
+                {
+                    ".rotate-y-180": {
+                        transform: "rotateY(180deg)",
+                    },
+                },
+                ["responsive", "hover"]
+            );
+        },
+    ],
 };

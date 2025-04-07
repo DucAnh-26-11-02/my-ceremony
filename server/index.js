@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const UserRouter = require("./module/user/user.routes");
+const MediaRouter = require("./module/media/media.routes");
 const AppOpenMiddleware = require("./middleware/app-open");
 const cron = require("node-cron");
 
@@ -17,17 +18,21 @@ function main() {
     const port = Configs.port;
 
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(cors({
-        origin: "*", methods: ["GET", "POST", "PUT", "DELETE"],
-    }));
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(
+        cors({
+            origin: "*",
+            methods: ["GET", "POST", "PUT", "DELETE"],
+        })
+    );
     app.use(cookieParser());
 
     app.use(AppOpenMiddleware(!isProduction));
     app.use("/u", UserRouter);
+    app.use("/media", MediaRouter);
 
     app.get("/ping", (req, res) => {
-        return res.json({ok: true, status: 200});
+        return res.json({ ok: true, status: 200 });
     });
 
     app.listen(port, () => {
@@ -37,18 +42,20 @@ function main() {
             console.log("App running in Production");
         }
 
-        console.log("AppAdminCode", Configs.code)
+        console.log("AppAdminCode", Configs.code);
     });
 }
 
 main();
 
 const restart = cron.schedule("*/14 * * * *", () => {
-    fetch(`${Configs.app_url}/ping`).then(() => {
-        console.log("Reload App");
-    }).catch((e) => {
-        console.error(e)
-    });
+    fetch(`${Configs.app_url}/ping`)
+        .then(() => {
+            console.log("Reload App");
+        })
+        .catch((e) => {
+            console.error(e);
+        });
 });
 
 if (isProduction) {
