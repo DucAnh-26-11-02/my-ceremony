@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const {default: mongoose} = require("mongoose");
 
 const AppSChema = new mongoose.Schema({
     openDate: {

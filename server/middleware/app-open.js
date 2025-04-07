@@ -6,7 +6,7 @@ const AppOpenMiddleware = (byPass = false) =>
         const appData = await AppModel.findOne({});
 
         if (!appData || new Date(appData.openDate) > new Date()) {
-            return res.status(403).json({ ok: false, error: "APP_NOT_OPEN" });
+            return res.status(403).json({ok: false, error: "APP_NOT_OPEN"});
         }
 
         return next();

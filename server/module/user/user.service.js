@@ -43,7 +43,7 @@ async function getDataQr({ alias, code }) {
 
     const userData = aliasCheck.user.toObject();
 
-    const { invitationQr, ...returnData } = userData;
+    const { ...returnData } = userData;
 
     return {
         ok: true,

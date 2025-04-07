@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const {default: mongoose} = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
     {
@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema(
             default: [],
         },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
 const UserModel = mongoose.model("User", UserSchema);
