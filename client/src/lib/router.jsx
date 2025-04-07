@@ -25,7 +25,6 @@ export default function AppRouter() {
                             <Route path="/qr" element={<QrLayout />}>
                                 <Route path="" element={<QrPage />} />
                             </Route>
-                            <Route path="*" element={<p>Not found</p>} />
                         </Route>
                     </>
                 )}
