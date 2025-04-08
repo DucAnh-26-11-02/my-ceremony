@@ -4,7 +4,10 @@ const QrCode = require("qrcode");
 const Configs = require("../../config");
 
 async function list() {
-    const [items, count] = await UserModel.find({});
+    const [items, count] = await Promise.all([
+        UserModel.find({}),
+        UserModel.countDocuments({}),
+    ]);
 
     return { ok: true, status: 200, data: { items, count } };
 }

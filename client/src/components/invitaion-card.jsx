@@ -34,7 +34,7 @@ export default function InvitationCard({
             }`}
         >
             <div className="w-full overflow-hidden flex">
-                <p className="w-full line-clamp-1 whitespace-nowrap text-ellipsis font-bold text-lg">
+                <p className="w-full line-clamp-1 whitespace-nowrap text-ellipsis font-bold text-lg flex-1 overflow-hidden">
                     {card.name}
                 </p>
                 {canEdit && card.status !== 3 && (

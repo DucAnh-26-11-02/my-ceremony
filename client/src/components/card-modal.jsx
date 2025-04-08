@@ -93,7 +93,7 @@ function CardModal({ data, onClose }) {
                         className=" group px-4 py-2 text-sm bg-slate-800/20 backdrop-blur-sm border border-slate-300 text-white rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 ease-in-out flex items-center justify-center hover:gap-2"
                     >
                         <FlipHorizontal2 className="w-5 h-5" />
-                        <p className="group-hover:w-full group-hover:h-fit w-0 h-0 leading-normal duration-200 overflow-hidden text-sm p-0 m-0">
+                        <p className="w-fit group-hover:block hidden leading-normal duration-200 overflow-hidden text-sm p-0 m-0">
                             Flip
                         </p>
                     </button>
