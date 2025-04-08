@@ -17,7 +17,7 @@ const imageUpload = async (file) => {
                     folder: "uploads",
                     resource_type: "auto",
                     use_filename: true,
-                    unique_filename: false,
+                    unique_filename: true,
                     overwrite: true,
                 },
                 (error, result) => {

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Download, X } from "lucide-react";
+import { Download } from "lucide-react";
 
 export function QrDownload({ qrCodeUrl, altText }) {
     const qrRef = useRef(null);

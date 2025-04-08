@@ -2,10 +2,7 @@ require("dotenv").config();
 
 const Configs = {
     port: process.env.PORT || 3001,
-    code:
-        process.env.NODE_ENV === "development" || !process.env.NODE_ENV
-            ? 261102
-            : Math.floor(Math.random() * 1000000),
+    code: process.env.ADMIN_CODE || null,
     environment: process.env.NODE_ENV || "development",
     app_url: process.env.APP_URL || "http://localhost:3001",
     frontend_url: process.env.FRONTEND_URL || "http://localhost:300",

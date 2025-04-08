@@ -3,7 +3,6 @@ import NotFound from "./not-found";
 import Loading from "./loading";
 import CeremonyDetails from "../../components/ceremony-detail";
 import { Configs } from "../../constants";
-import { ReturnHome } from "../../components/return-home";
 
 const getCeremonyData = async (alias, code) => {
     const res = await fetch(
