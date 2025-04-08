@@ -7,24 +7,34 @@ import { FileX2 } from "lucide-react";
 
 const canEdit = Configs.app_state === "allow_edit";
 
+const STATES = {
+    MAPPING_ID: "MAPPING_ID",
+    MAP_DEFAULT_STATE: "MAP_DEFAULT_STATE",
+};
+
 export default function CeremonyInvitaionCards({ cards = [], onSave }) {
     const [viewerData, setViewerData] = useState(null);
-    const [invitaionCards, setInvitaionCards] = useState(cards);
+    const [invitaionCards, setInvitaionCards] = useState([]);
     const [isUpdate, setIsUpdate] = useState(false);
 
     const handleCloseModal = () => setViewerData(null);
 
     const mapId = (cards, state) => {
-        return cards.map((card, index) => {
-            return {
-                id: index + 1,
-                ...card,
-            };
-        });
+        return cards.map((card, index) => ({
+            id: index + 1,
+            ...card,
+        }));
     };
 
     const mapDefaultState = (cards) => {
         return cards.map((card) => ({ ...card, status: 0 }));
+    };
+
+    const handleClickReview = (card) => (type) => {
+        setViewerData({
+            card,
+            type,
+        });
     };
 
     const handleCreateConfirm = (data) => {
@@ -41,19 +51,13 @@ export default function CeremonyInvitaionCards({ cards = [], onSave }) {
 
     const handleDeleted = (id) => {
         setInvitaionCards((prev) =>
-            mapId(prev.filter((card) => card.id !== id))
+            prev.map((card) => (card.id === id ? { ...card, status: 3 } : card))
         );
         setIsUpdate(true);
     };
 
     const handleSaveChanges = () => {
-        onSave(
-            invitaionCards.map((card) => ({
-                front: card.front,
-                back: card.back,
-                name: card.name,
-            }))
-        );
+        onSave(invitaionCards);
         setIsUpdate(false);
     };
 
@@ -93,7 +97,7 @@ export default function CeremonyInvitaionCards({ cards = [], onSave }) {
                             <InvitationCard
                                 card={card}
                                 canEdit={canEdit}
-                                setViewerData={setViewerData}
+                                onClickReview={handleClickReview(card)}
                                 onDelete={handleDeleted}
                             />
                         </Fragment>
@@ -107,7 +111,7 @@ export default function CeremonyInvitaionCards({ cards = [], onSave }) {
             </div>
 
             {viewerData && (
-                <CardModal card={viewerData} onClose={handleCloseModal} />
+                <CardModal data={viewerData} onClose={handleCloseModal} />
             )}
         </>
     );

@@ -47,25 +47,74 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
         },
     ];
 
+    const handleRemoveImage = async (image) => {
+        if (!image) return null;
+
+        const res = await fetch(`${Configs.backend_url}/media/image/remove`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+                code: Configs.backend_code,
+            },
+            body: JSON.stringify({
+                publicId: image.public_id,
+            }),
+        });
+
+        if (!res.ok) {
+            return null;
+        }
+
+        return true;
+    };
+
+    const cleanCards = (cards) => {
+        return cards.reduce((acc, curr) => {
+            if (curr.status === 3) return acc;
+
+            acc.push({
+                name: curr.name,
+                front: curr.front,
+                back: curr.back,
+            });
+
+            return acc;
+        }, []);
+    };
+
     const handleSaveInvitationCards = (cards) => {
+        const removeCards = cards.filter((i) => i.status === 3);
+        const removeImages = [];
+
+        if (removeCards.length) {
+            removeCards.forEach((card) => {
+                const { front, back } = card;
+                removeImages.push(
+                    handleRemoveImage(front),
+                    handleRemoveImage(back)
+                );
+            });
+        }
         const newData = {
             alias: ceremony.alias,
             name: ceremony.name,
-            invitationCards: cards,
+            invitationCards: cleanCards(cards),
             contents: ceremony.contents,
         };
+        console.log(cards);
         setState(STATES.IS_UPDATING);
-
-        fetch(`${Configs.backend_url}/u/${ceremony.alias}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                code: Configs.backend_code,
-            },
-            body: JSON.stringify(newData),
-        }).then((res) => {
-            onUpdate();
-            setState(STATES.IDLE);
+        Promise.all(removeImages).then(() => {
+            fetch(`${Configs.backend_url}/u/${ceremony.alias}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    code: Configs.backend_code,
+                },
+                body: JSON.stringify(newData),
+            }).then((res) => {
+                onUpdate();
+                setState(STATES.IDLE);
+            });
         });
     };
 

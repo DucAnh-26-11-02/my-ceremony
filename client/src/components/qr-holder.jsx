@@ -1,6 +1,14 @@
 import { useRef, useState } from "react";
-import { Check, LoaderIcon, RefreshCw, Upload, X } from "lucide-react";
+import {
+    Check,
+    CircleAlert,
+    LoaderIcon,
+    RefreshCw,
+    Upload,
+    X,
+} from "lucide-react";
 import jsQR from "jsqr";
+import { Configs } from "../constants";
 
 const QR_HOLDER_STATES = {
     IDLE: "IDLE",
@@ -11,6 +19,8 @@ const QR_HOLDER_STATES = {
     LOAD_FAILED_IMAGE: "LOAD_FAILED_IMAGE",
     SCANNING_QR: "SCANNING_QR",
     SCANNED_QR: "SCANNED_QR",
+    CORRECT_FORMAT_QR: "CORRECT_FORMAT_QR",
+    WRONG_FORMAT_QR: "WRONG_FORMAT_QR",
     SCAN_FAILED_QR: "SCAN_FAILED_QR",
 };
 
@@ -19,6 +29,12 @@ export function QrHolder() {
     const [qrResult, setQrResult] = useState("");
     const [state, setState] = useState(QR_HOLDER_STATES.IDLE);
     const fileInputRef = useRef(null);
+
+    const isCorrectFormatQrResult = (result = "") => {
+        if (!result) return false;
+
+        return result.startsWith(Configs.frontend_url + "/qr");
+    };
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -90,8 +106,14 @@ export function QrHolder() {
             );
 
             if (code) {
-                setQrResult(code.data);
                 setState(QR_HOLDER_STATES.SCANNED_QR);
+                if (!isCorrectFormatQrResult(code.data)) {
+                    setQrResult(null);
+                    setState(QR_HOLDER_STATES.WRONG_FORMAT_QR);
+                } else {
+                    setQrResult(code.data);
+                    setState(QR_HOLDER_STATES.CORRECT_FORMAT_QR);
+                }
             } else {
                 setQrResult(null);
                 setState(QR_HOLDER_STATES.SCAN_FAILED_QR);
@@ -190,7 +212,7 @@ export function QrHolder() {
                         Scanning QR code
                     </div>
                 )}
-                {state === QR_HOLDER_STATES.SCANNED_QR && !!qrResult && (
+                {state === QR_HOLDER_STATES.CORRECT_FORMAT_QR && !!qrResult && (
                     <div className=" bg-emerald-500 dark:bg-emerald-600 text-white text-center py-2 text-sm rounded-md flex flex-col items-center">
                         <div className="flex">
                             <Check className="inline-block h-4 w-4 mr-1" />
@@ -208,6 +230,12 @@ export function QrHolder() {
                     <div className=" bg-red-500 dark:bg-red-600 text-white text-center py-2 text-sm rounded-md">
                         <X className="inline-block h-4 w-4 mr-1" />
                         Failed to get QR data
+                    </div>
+                )}
+                {state === QR_HOLDER_STATES.WRONG_FORMAT_QR && (
+                    <div className=" bg-yellow-500 dark:bg-yellow-600 text-white text-center py-2 text-sm rounded-md">
+                        <CircleAlert className="inline-block h-4 w-4 mr-1" />
+                        QR is in wrong format
                     </div>
                 )}
             </div>

@@ -112,10 +112,11 @@ export default function CreateInvitationCard({ onCreateConfirm }) {
         const res = await fetch(`${Configs.backend_url}/media/image/remove`, {
             method: "DELETE",
             headers: {
+                "Content-type": "application/json",
                 code: Configs.backend_code,
             },
             body: JSON.stringify({
-                publicId: image.publicId,
+                publicId: image.public_id,
             }),
         });
 
