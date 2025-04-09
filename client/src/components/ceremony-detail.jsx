@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Clock, Hash, LoaderCircle, User } from "lucide-react";
 import { QrDownload } from "./qr-download";
 import CeremonyInvitaionCards from "./ceremony-invitation-cards";
 import { Configs } from "../constants";
+import ModifyContentCard from "./modify-content-card";
 
 const STATES = {
     IDLE: "IDLE",
     IS_UPDATING: "IS_UPDATING",
+    OPEN_ADD_CONTENT: "OPEN_ADD_CONTENT",
 };
+
+const canEdit = Configs.app_state === "allow_edit";
 
 export default function CeremonyDetails({ ceremony, onUpdate }) {
     const [activeTab, setActiveTab] = useState("details");
     const [state, setState] = useState(STATES.IDLE);
+    const [contents, setContents] = useState(ceremony.contents);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -46,6 +51,10 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
             icon: Clock,
         },
     ];
+
+    const getId = () => {
+        return (contents.at(-1)?.id || 0) + 1;
+    };
 
     const handleRemoveImage = async (image) => {
         if (!image) return null;
@@ -82,6 +91,14 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
         }, []);
     };
 
+    const cleanContents = (contents) => {
+        return contents.map((content) => {
+            const { isNew, isDelete, id, ...cleanedContent } = content;
+
+            return cleanedContent;
+        });
+    };
+
     const handleSaveInvitationCards = (cards) => {
         const removeCards = cards.filter((i) => i.status === 3);
         const removeImages = [];
@@ -101,7 +118,6 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
             invitationCards: cleanCards(cards),
             contents: ceremony.contents,
         };
-        console.log(cards);
         setState(STATES.IS_UPDATING);
         Promise.all(removeImages).then(() => {
             fetch(`${Configs.backend_url}/u/${ceremony.alias}`, {
@@ -118,13 +134,58 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
         });
     };
 
+    const handleClickAddContent = () => {
+        setState(STATES.OPEN_ADD_CONTENT);
+    };
+
+    const handleSaveContent = () => {
+        const newData = {
+            alias: ceremony.alias,
+            name: ceremony.name,
+            invitationCards: ceremony.invitationCards,
+            contents: cleanContents(contents),
+        };
+        fetch(`${Configs.backend_url}/u/${ceremony.alias}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                code: Configs.backend_code,
+            },
+            body: JSON.stringify(newData),
+        }).then((res) => {
+            onUpdate();
+            setState(STATES.IDLE);
+        });
+    };
+
+    const handleConfirmChange = (content) => {
+        let newContent = contents;
+        if (content.isNew) {
+            newContent = [...contents, { ...content, isNew: false }];
+        } else if (content.isDelete) {
+            newContent = contents.filter((c) => c.id !== content.id);
+        } else {
+            newContent = contents.map((c) =>
+                c.id === content.id ? content : c
+            );
+        }
+
+        setContents(newContent);
+    };
+
     return (
         <div className="flex flex-col gap-3 w-full">
+            {state === STATES.IS_UPDATING && (
+                <div className="absolute w-full h-full bg-slate-800/50 backdrop-blur-sm flex flex-col gap-2 items-center justify-center top-0 left-0 z-50">
+                    <LoaderCircle size={20} className="animate-spin" />
+                    <p>Updating</p>
+                </div>
+            )}
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-700/20 overflow-hidden">
                 <div className="flex border-b border-slate-200 dark:border-slate-700">
                     <button
                         onClick={() => setActiveTab("details")}
-                        className={`flex-1 py-3 px-4 text-sm sm:text-base font-medium transition-colors ${
+                        className={`flex-1 py-3 px-2 md:px-4 text-sm sm:text-base font-medium transition-colors ${
                             activeTab === "details"
                                 ? "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white"
                                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50"
@@ -134,7 +195,7 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                     </button>
                     <button
                         onClick={() => setActiveTab("cards")}
-                        className={`flex-1 py-3 px-4 text-sm sm:text-base font-medium transition-colors ${
+                        className={`flex-1 py-3 px-2 md:px-4 text-sm sm:text-base font-medium transition-colors ${
                             activeTab === "cards"
                                 ? "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white"
                                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50"
@@ -145,13 +206,7 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 sm:p-6 relative">
-                    {state === STATES.IS_UPDATING && (
-                        <div className="absolute w-full h-full bg-slate-800/50 backdrop-blur-sm flex flex-col gap-2 items-center justify-center top-0 left-0 z-50">
-                            <LoaderCircle size={20} className="animate-spin" />
-                            <p>Updating</p>
-                        </div>
-                    )}
+                <div className="p-2 md:p-6 relative">
                     {activeTab === "details" && (
                         <div className="space-y-4">
                             {infoItems.map(
@@ -196,6 +251,48 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                 <div className="bg-slate-50 dark:bg-slate-700/30 px-4 py-3 text-center text-xs text-slate-500 dark:text-slate-400">
                     Duc Anh Ceremony
                 </div>
+            </div>
+
+            {/* Content */}
+            <div
+                className={` flex flex-col gap-3 py-2 box-border ${
+                    state === STATES.OPEN_ADD_CONTENT ||
+                    ceremony.contents.length
+                        ? "min-h-[90dvh]"
+                        : ""
+                }`}
+            >
+                {contents.map((content) => (
+                    <ModifyContentCard
+                        mode="update"
+                        initContent={content}
+                        onConfirm={handleConfirmChange}
+                        isEditing={canEdit}
+                    />
+                ))}
+                {canEdit && (
+                    <div className="flex flex-col gap-2 w-full sticky bottom-0 left-0 bg-slate-50 dark:bg-slate-800 p-5 rounded-md">
+                        <button
+                            onClick={handleSaveContent}
+                            className="w-full border border-slate-300 dark:border-slate-600 py-2 rounded-md hover:bg-slate-300 dark:hover:bg-slate-700 text-sm"
+                        >
+                            Save changes
+                        </button>
+                        <button
+                            onClick={handleClickAddContent}
+                            className="w-full border border-slate-300 dark:border-slate-600 py-2 rounded-md hover:bg-slate-300 dark:hover:bg-slate-700 text-sm"
+                        >
+                            Add Content
+                        </button>
+                        {state === STATES.OPEN_ADD_CONTENT && (
+                            <ModifyContentCard
+                                getId={getId}
+                                onConfirm={handleConfirmChange}
+                                isEditing={canEdit}
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

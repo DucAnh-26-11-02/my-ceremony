@@ -214,7 +214,7 @@ export default function CreateInvitationCard({ onCreateConfirm }) {
         <div>
             <div className="mb-4 w-full">
                 <button
-                    className="flex items-center gap-2 box-border h-fit p-2 px-5 border border-slate-200 dark:border-slate-500 rounded-md bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 duration-100 w-full justify-center"
+                    className="flex items-center gap-2 box-border h-fit p-2 md:p-3 border border-slate-200 dark:border-slate-500 rounded-md bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 duration-100 w-full justify-center"
                     onClick={handleChangeState(
                         CREATE_INVITATION_CARD_STATE.OPEN_FORM
                     )}

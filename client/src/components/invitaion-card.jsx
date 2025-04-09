@@ -15,7 +15,7 @@ export default function InvitationCard({
     };
     return (
         <div
-            className={`relative h-fit flex flex-col gap-3 w-full box-border p-5 border rounded-lg bg-white dark:bg-slate-700 
+            className={`relative h-fit flex flex-col gap-2 md:gap-3 w-full box-border p-3 md:p-5 border rounded-lg bg-white dark:bg-slate-700 
             ${card.status === 3 ? "border-red-300 dark:border-red-600" : ""} 
             ${
                 card.status === 2
@@ -34,13 +34,15 @@ export default function InvitationCard({
             }`}
         >
             <div className="w-full overflow-hidden flex">
-                <p className="w-full line-clamp-1 whitespace-nowrap text-ellipsis font-bold text-lg flex-1 overflow-hidden">
-                    {card.name}
-                </p>
+                <div className="flex-1 overflow-hidden flex items-center">
+                    <p className="w-full line-clamp-1 break-words text-ellipsis font-bold text-normal md:text-lg overflow-hidden">
+                        {card.name}
+                    </p>
+                </div>
                 {canEdit && card.status !== 3 && (
                     <div>
                         <button
-                            className="flex items-center gap-2 p-2 bg-red-600 text-white hover:bg-red-700 duration-75 rounded-md px-5 text-sm"
+                            className="flex items-center gap-1 md:gap-2 p-1.5 md:p-2 bg-red-600 text-white hover:bg-red-700 duration-75 rounded-md px-3 md:px-5 text-sm"
                             onClick={handleDelete}
                         >
                             <TrashIcon size={15} /> Delete
@@ -50,7 +52,7 @@ export default function InvitationCard({
             </div>
 
             <div
-                className={`rounded-md box-border w-full h-fit gap-5 grid grid-cols-2 duration-75`}
+                className={`rounded-md box-border w-full h-fit gap-2 md:gap-5 grid grid-cols-2 duration-75`}
             >
                 {card.front && (
                     <div

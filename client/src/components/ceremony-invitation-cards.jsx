@@ -68,11 +68,11 @@ export default function CeremonyInvitaionCards({ cards = [], onSave }) {
 
     return (
         <>
-            <div className="flex flex-col gap-5 w-full relative">
+            <div className="flex flex-col md:gap-5 gap-3 w-full relative">
                 {isUpdate && canEdit && (
                     <div className="w-full">
                         <button
-                            className="text-slate-800 dark:text-slate-50 bg-transparent border border-slate-300 dark:border-slate-500 p-3 w-full rounded-lg"
+                            className="text-slate-800 dark:text-slate-50 bg-transparent border border-slate-300 dark:border-slate-500 p-2 md:p-3 w-full rounded-lg"
                             onClick={handleSaveChanges}
                         >
                             Save changes
