@@ -106,6 +106,14 @@ async function add({ name, alias }) {
     }
 }
 
+async function remove({ alias }) {
+    const aliasCheck = await checkExist({ error: "ne", alias });
+    if (!aliasCheck?.ok) return aliasCheck;
+
+    await UserModel.deleteOne({ alias });
+    return { ok: true, status: 200 };
+}
+
 async function update({ alias, name, invitationCards, contents }) {
     const aliasCheck = await checkExist({ error: "ne", alias });
     if (!aliasCheck?.ok) return aliasCheck;
@@ -129,4 +137,5 @@ module.exports = {
     getDataQr,
     list,
     update,
+    remove,
 };
