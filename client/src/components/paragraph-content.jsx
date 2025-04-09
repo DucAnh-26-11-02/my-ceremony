@@ -96,7 +96,7 @@ export default function ParagraphContent({ paragraph, isEditing, onChange }) {
                     />
                 </>
             ) : (
-                <p className="text-sm break-words w-full text-left">
+                <p className="text-sm break-words whitespace-pre-wrap w-full text-left">
                     {paragraph?.value}
                 </p>
             )}

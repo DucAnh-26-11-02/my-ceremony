@@ -118,23 +118,25 @@ export default function ModifyContentCard({
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="w-full flex gap-2 group duration-75">
-                {BUTTON_TYPES.map(({ type, icon: Icon, text }) => (
-                    <button
-                        onClick={handleSelectContentType(type)}
-                        className={`duration-75 flex gap-2 items-center px-3 py-2 border rounded-md justify-center ${
-                            content?.type === type
-                                ? "dark:bg-white bg-slate-800 dark:text-slate-800 text-slate-50 border-slate-300 dark:border-slate-600 text-sm hover:bg-slate-400 dark:hover:bg-slate-200 flex-1 font-bold"
-                                : `bg-transparent border-slate-300 dark:border-slate-600 text-sm hover:bg-slate-200 dark:hover:bg-slate-700 ${
-                                      !!content ? "flex-0" : "flex-1"
-                                  }`
-                        }`}
-                    >
-                        {!!Icon && <Icon size={15} />}
-                        {text}
-                    </button>
-                ))}
-            </div>
+            {isEditing && (
+                <div className="w-full flex gap-2 group duration-75">
+                    {BUTTON_TYPES.map(({ type, icon: Icon, text }) => (
+                        <button
+                            onClick={handleSelectContentType(type)}
+                            className={`duration-75 flex gap-2 items-center px-3 py-2 border rounded-md justify-center ${
+                                content?.type === type
+                                    ? "dark:bg-white bg-slate-800 dark:text-slate-800 text-slate-50 border-slate-300 dark:border-slate-600 text-sm hover:bg-slate-400 dark:hover:bg-slate-200 flex-1 font-bold"
+                                    : `bg-transparent border-slate-300 dark:border-slate-600 text-sm hover:bg-slate-200 dark:hover:bg-slate-700 ${
+                                          !!content ? "flex-0" : "flex-1"
+                                      }`
+                            }`}
+                        >
+                            {!!Icon && <Icon size={15} />}
+                            {text}
+                        </button>
+                    ))}
+                </div>
+            )}
             <div
                 className={`w-full rounded-lg ${
                     isEditing
