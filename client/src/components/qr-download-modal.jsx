@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Download, User, ImageIcon, User2 } from "lucide-react";
+import { X, Download, User, ImageIcon, User2, Trash } from "lucide-react";
 import { Configs } from "../constants";
 
 export function QrDownloadModal() {
@@ -71,6 +71,20 @@ export function QrDownloadModal() {
                 alias: "",
                 name: "",
             });
+        });
+    };
+
+    const handleDelete = (user) => {
+        fetch(`${Configs.backend_url}/u/${user.alias}`, {
+            method: "DELETE",
+            headers: {
+                code: Configs.backend_code,
+                "Content-type": "application/json",
+            },
+        }).then((res) => {
+            if (res.ok) {
+                fetchUser();
+            }
         });
     };
 
@@ -177,6 +191,15 @@ export function QrDownloadModal() {
                                                 >
                                                     <Download className="h-4 w-4" />
                                                     <span>Download QR</span>
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleDelete(user)
+                                                    }
+                                                    className="mt-2 flex items-center gap-2 px-4 py-2 backdrop-blur-sm bg-white/50 dark:bg-slate-700/50 border border-white/20 dark:border-slate-600/50 rounded-full text-red-700 dark:text-red-500 hover:bg-white/70 dark:hover:bg-slate-600/70 transition-colors"
+                                                >
+                                                    <Trash className="h-4 w-4" />
+                                                    <span>Delete</span>
                                                 </button>
                                             </div>
                                         </div>
