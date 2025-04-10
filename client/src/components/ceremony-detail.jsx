@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Calendar, Clock, Hash, LoaderCircle, User } from "lucide-react";
+import {
+    Calendar,
+    Clock,
+    Hash,
+    LoaderCircle,
+    LocateIcon,
+    User,
+} from "lucide-react";
 import { QrDownload } from "./qr-download";
 import CeremonyInvitaionCards from "./ceremony-invitation-cards";
 import { Configs } from "../constants";
@@ -10,6 +17,12 @@ const STATES = {
     IS_UPDATING: "IS_UPDATING",
     OPEN_ADD_CONTENT: "OPEN_ADD_CONTENT",
 };
+
+const CEREMONY_DATE = new Date();
+CEREMONY_DATE.setMonth(3);
+CEREMONY_DATE.setFullYear(2025);
+CEREMONY_DATE.setDate(12);
+CEREMONY_DATE.setHours(7, 0, 0);
 
 const canEdit = Configs.app_state === "allow_edit";
 
@@ -31,24 +44,19 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
 
     const infoItems = [
         {
-            label: "Name",
+            label: "Gửi tới",
             value: ceremony.name,
             icon: User,
         },
         {
-            label: "Code",
-            value: ceremony.code,
-            icon: Hash,
+            label: "Địa điểm",
+            value: "Đại học Thăng Long",
+            icon: LocateIcon,
         },
         {
-            label: "Created",
-            value: formatDate(ceremony.createdAt),
+            label: "Thời gian",
+            value: formatDate(CEREMONY_DATE),
             icon: Calendar,
-        },
-        {
-            label: "Updated",
-            value: formatDate(ceremony.updatedAt),
-            icon: Clock,
         },
     ];
 
@@ -145,6 +153,7 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
             invitationCards: ceremony.invitationCards,
             contents: cleanContents(contents),
         };
+        setState(STATES.IS_UPDATING);
         fetch(`${Configs.backend_url}/u/${ceremony.alias}`, {
             method: "PUT",
             headers: {
@@ -215,13 +224,13 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                                         key={index}
                                         className="flex flex-col sm:flex-row sm:items-center p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
                                     >
-                                        <div className="flex items-center mb-2 sm:mb-0 sm:mr-4">
-                                            <Icon className="h-5 w-5 text-slate-500 dark:text-slate-400 mr-2" />
+                                        <div className="flex items-center mb-2 sm:mb-0 sm:mr-4 md:w-[100px] w-full">
+                                            <Icon className="h-5 w-5 text-slate-500 dark:text-slate-400 mr-2 " />
                                             <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                 {label}:
                                             </span>
                                         </div>
-                                        <span className="text-slate-900 dark:text-white font-semibold break-all capitalize">
+                                        <span className="text-slate-900 dark:text-white font-semibold break-all capitalize flex-1">
                                             {value}
                                         </span>
                                     </div>
