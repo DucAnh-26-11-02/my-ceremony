@@ -11,21 +11,22 @@ export default function MainPage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="text-center mb-6 sm:mb-12">
                         <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-3 sm:mb-4">
-                            Welcome to the Ceremony
+                            Chào mừng mọi người tới lễ tốt nghiệp của iemmm Đức
+                            Anh
                         </h1>
                         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
-                            Please scan the QR code below to register your
-                            attendance
+                            Vui lòng quét QR để xem chi tiết
                         </p>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-700/20 p-4 sm:p-8 mb-8 sm:mb-12 flex flex-col items-center">
                         <div className="text-center mb-4 sm:mb-6">
                             <h2 className="text-xl sm:text-2xl font-semibold text-slate-700 dark:text-slate-200">
-                                Scan QR Code
+                                Quét QR code
                             </h2>
                             <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 mt-1 sm:mt-2">
-                                Use your smartphone camera to scan the QR code
+                                Chọn mã QR của bạn để xem lời nhắn được gửi từ
+                                Đức Anh
                             </p>
                         </div>
 
@@ -35,7 +36,7 @@ export default function MainPage() {
                     <div className="text-center text-slate-500 dark:text-slate-400 text-xs sm:text-sm">
                         <p>
                             © {new Date().getFullYear()} Ceremony Organizers.
-                            All rights reserved.
+                            Belong to Duc Anh
                         </p>
                     </div>
                 </div>

@@ -182,12 +182,21 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
         setContents(newContent);
     };
 
+    useEffect(() => {
+        setContents(
+            ceremony.contents?.map((content, id) => ({
+                id: id + 1,
+                ...content,
+            })) || []
+        );
+    }, [ceremony]);
+
     return (
         <div className="flex flex-col gap-3 w-full">
             {state === STATES.IS_UPDATING && (
-                <div className="absolute w-full h-full bg-slate-800/50 backdrop-blur-sm flex flex-col gap-2 items-center justify-center top-0 left-0 z-50">
+                <div className="fixed w-full h-full bg-slate-800/50 backdrop-blur-sm flex flex-col gap-2 items-center justify-center top-0 left-0 z-50">
                     <LoaderCircle size={20} className="animate-spin" />
-                    <p>Updating</p>
+                    <p>Đang cập nhật</p>
                 </div>
             )}
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-700/20 overflow-hidden">
@@ -200,7 +209,7 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50"
                         }`}
                     >
-                        Details
+                        Chi tiết
                     </button>
                     <button
                         onClick={() => setActiveTab("cards")}
@@ -210,7 +219,7 @@ export default function CeremonyDetails({ ceremony, onUpdate }) {
                                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50"
                         }`}
                     >
-                        Invitation Cards ({ceremony.invitationCards.length})
+                        Thiệp ({ceremony.invitationCards.length})
                     </button>
                 </div>
 

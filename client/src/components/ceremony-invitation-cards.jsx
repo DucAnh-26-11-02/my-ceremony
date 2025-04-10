@@ -27,6 +27,7 @@ export default function CeremonyInvitaionCards({ cards = [], onSave }) {
     };
 
     const mapDefaultState = (cards) => {
+        console.log(cards);
         return cards.map((card) => ({ ...card, status: 0 }));
     };
 

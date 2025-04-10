@@ -95,10 +95,11 @@ export default function QrPage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="text-center mb-6 sm:mb-12">
                         <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-3 sm:mb-4">
-                            Ceremony Details
+                            Thông tin tốt nghiệp
                         </h1>
                         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
-                            Viewing information for my ceremony
+                            Xem thông tin chi tiết lời cảm ơn và thông tin lễ
+                            tốt nghiệp
                         </p>
                     </div>
                     <CeremonyDetails
