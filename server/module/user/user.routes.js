@@ -14,7 +14,7 @@ const UserRouter = require("express").Router();
 UserRouter.get(
     "/qr/data",
     (req, res, next) => {
-        const { alias, code } = req;
+        const { alias, code } = req.query;
         console.log(`${alias || ""}:${code || ""} is getting data!`);
         next();
     },
